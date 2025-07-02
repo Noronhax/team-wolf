@@ -1,13 +1,13 @@
 const produtos = [
   {
     nome: "Conjunto Team Wolf SS25 Futevôlei Masculino - branco e preto",
-    preco: 139.99,
+    preco: 120.00,
     imagem: "uniformes/instrutor1.jpg",
     descricao: "Conjunto oficial masculino preto e branco, leve e confortável."
   },
   {
     nome: "Conjunto Team Wolf SS25 Futevôlei Masculino - preto e branco",
-    preco: 139.99,
+    preco: 120.00,
     imagem: "uniformes/aluno2.png",
     descricao: "Conjunto oficial masculino preto e branco, leve e confortável."
   },
@@ -19,7 +19,7 @@ const produtos = [
   },
   {
     nome: "Conjunto Team Wolf SS25 Futevôlei - preto e dourado",
-    preco: 139.99,
+    preco: 149.90,
     imagem: "uniformes/preto e dourado.png",
     descricao: "Conjunto oficial masculino preto e branco, leve e confortável."
   },
@@ -31,7 +31,7 @@ const produtos = [
   },
   {
      nome: "Calção Team Wolf SS25 Futevôlei feminino- preto/branco",
-    preco: 139.99,
+    preco: 69.99,
     imagem: "uniformes/aluno1.png",
     descricao: "Calção oficial feminino preto com branco, leve e confortável."
   },
