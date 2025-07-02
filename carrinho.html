@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carrinho | Team Wolf FTV</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+    body {
+      background: linear-gradient(135deg, #121212, #1a1a1a);
+      color: #e0e0e0;
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 2rem 1rem 3rem 1rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header img {
+      max-width: 180px;
+      filter: drop-shadow(0 0 10px rgba(15, 157, 88, 0.8));
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #0f9d58;
+      text-shadow: 0 0 8px rgba(15, 157, 88, 0.7);
+      letter-spacing: 2px;
+    }
+
+    #lista-carrinho {
+      max-width: 700px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .item-carrinho {
+      display: flex;
+      background: #222;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.7);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+
+    .item-carrinho:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.9);
+    }
+
+    .item-carrinho img {
+      width: 140px;
+      object-fit: cover;
+      border-right: 4px solid #0f9d58;
+      transition: transform 0.3s ease;
+    }
+
+    .item-carrinho img:hover {
+      transform: scale(1.05);
+    }
+
+    .info-produto {
+      padding: 1rem 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .info-produto h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: #a5d6a7;
+      text-shadow: 0 0 5px rgba(165,214,167,0.8);
+    }
+
+    .info-produto p {
+      margin: 0.4rem 0;
+      font-weight: 500;
+      font-size: 1rem;
+      color: #d0d0d0;
+    }
+
+    .quantidade {
+      font-weight: 700;
+      color: #81c784;
+    }
+
+    .subtotal {
+      font-weight: 700;
+      color: #66bb6a;
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+
+    button.remover {
+      background: #e53935;
+      border: none;
+      color: white;
+      padding: 0.7rem 1.3rem;
+      border-radius: 0 15px 15px 0;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      align-self: center;
+      font-size: 1rem;
+      box-shadow: 0 3px 7px rgba(229, 57, 53, 0.6);
+      border-left: 2px solid #b71c1c;
+    }
+
+    button.remover:hover {
+      background: #b71c1c;
+      box-shadow: 0 5px 12px rgba(183, 28, 28, 0.8);
+    }
+
+    #total {
+      max-width: 700px;
+      width: 100%;
+      margin-top: 2rem;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #0f9d58;
+      text-align: right;
+      text-shadow: 0 0 10px rgba(15, 157, 88, 0.8);
+    }
+
+    #pagamento {
+      margin-top: 2rem;
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    }
+
+    #pagamento h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+      color: #0f9d58;
+    }
+
+    #pagamento label {
+      margin: 0 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #btn-whatsapp {
+      display: block;
+      max-width: 300px;
+      margin: 2.5rem auto 0 auto;
+      background: #25d366;
+      color: white;
+      font-weight: 700;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-align: center;
+      font-size: 1.2rem;
+      text-decoration: none;
+      box-shadow: 0 5px 15px rgba(37, 211, 102, 0.7);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #btn-whatsapp:hover {
+      background-color: #1ebe57;
+      box-shadow: 0 8px 20px rgba(30, 190, 87, 0.9);
+    }
+
+    .vazio {
+      font-size: 1.4rem;
+      color: #777;
+      margin-top: 6rem;
+      font-style: italic;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .item-carrinho {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .item-carrinho img {
+        width: 100%;
+        border-right: none;
+        border-bottom: 4px solid #0f9d58;
+        border-radius: 15px 15px 0 0;
+      }
+
+      .info-produto {
+        padding: 1rem;
+      }
+
+      #total {
+        text-align: center;
+      }
+
+      button.remover {
+        width: 100%;
+        border-radius: 0 0 15px 15px;
+        border-left: none;
+      }
+
+      #btn-whatsapp {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo_6-removebg-preview.png" alt="Logo Team Wolf FTV" />
+    <h1>Seu Carrinho</h1>
+  </header>
+
+  <div id="lista-carrinho"></div>
+  <div id="total"></div>
+
+  <div id="pagamento">
+    <h2>Escolha a forma de pagamento:</h2>
+    <label>
+      <input type="radio" name="pagamento" value="PIX" checked> PIX
+    </label>
+    <label>
+      <input type="radio" name="pagamento" value="Cartão"> Cartão
+    </label>
+  </div>
+
+  <a id="btn-whatsapp" href="#" target="_blank" style="display:none;">Finalizar compra via WhatsApp</a>
+
+  <script>
+    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+    const lista = document.getElementById('lista-carrinho');
+    const totalDiv = document.getElementById('total');
+    const btnWhatsApp = document.getElementById('btn-whatsapp');
+
+    function atualizarCarrinho() {
+      lista.innerHTML = '';
+      if (carrinho.length === 0) {
+        lista.innerHTML = `<p class="vazio">Seu carrinho está vazio.</p>`;
+        totalDiv.textContent = '';
+        btnWhatsApp.style.display = 'none';
+        return;
+      }
+
+      let total = 0;
+
+      carrinho.forEach((item, i) => {
+        total += item.preco * item.quantidade;
+
+        const div = document.createElement('div');
+        div.className = 'item-carrinho';
+        div.innerHTML = `
+          <img src="${item.imagem}" alt="${item.nome}" />
+          <div class="info-produto">
+            <h2>${item.nome}</h2>
+            <p>Preço unitário: R$ ${item.preco.toFixed(2)}</p>
+            <p class="quantidade">Quantidade: ${item.quantidade}</p>
+            <p class="subtotal">Subtotal: R$ ${(item.preco * item.quantidade).toFixed(2)}</p>
+          </div>
+          <button class="remover" onclick="removerItem(${i})">Remover</button>
+        `;
+        lista.appendChild(div);
+      });
+
+      totalDiv.textContent = `Total: R$ ${total.toFixed(2)}`;
+      btnWhatsApp.style.display = 'block';
+
+      let texto = "Olá, gostaria de comprar:\n";
+      carrinho.forEach(item => {
+        texto += `• ${item.nome} - R$ ${item.preco.toFixed(2)} (x${item.quantidade})\n`;
+      });
+
+      const forma = document.querySelector('input[name="pagamento"]:checked');
+      if (forma) {
+        texto += `\nForma de pagamento: ${forma.value}`;
+      }
+
+      const link = "https://wa.me/5575998253258?text=" + encodeURIComponent(texto);
+      btnWhatsApp.href = link;
+    }
+
+    function removerItem(i) {
+      if (carrinho[i].quantidade > 1) {
+        carrinho[i].quantidade -= 1;
+      } else {
+        carrinho.splice(i, 1);
+      }
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+      atualizarCarrinho();
+    }
+
+    atualizarCarrinho();
+  </script>
+</body>
+</html>

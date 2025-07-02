@@ -1,0 +1,221 @@
+body {
+  background: #000;
+  color: #fff;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: #111;
+}
+
+.logo {
+  width: 100px;
+  margin-bottom: 1rem;
+}
+
+.catalogo {
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.item {
+  background: #1a1a1a;
+  padding: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.item:hover {
+  transform: scale(1.03);
+}
+
+.item img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.item h2 {
+  margin: 0.8rem 0 0.4rem;
+}
+
+.item button {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.item button:hover {
+  background-color: #ccc;
+  color: #000;
+}
+
+.carrinho-flutuante {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: #1a1a1a;
+  padding: 1rem;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  width: 280px;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.carrinho-flutuante img {
+  width: 60px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+#fechar-carrinho {
+  font-weight: bold;
+  line-height: 1;
+  padding: 0 8px;
+  color: #fff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+#fechar-carrinho:hover {
+  color: #f44336; /* vermelho suave */
+}
+
+#btn-whatsapp {
+  display: block;
+  background: green;
+  color: white;
+  text-align: center;
+  padding: 0.7rem;
+  margin-top: 1rem;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+#btn-whatsapp:hover {
+  background-color: #0b7a0b;
+}
+
+.btn-ver-carrinho {
+  font-size: 0.9rem;
+}
+
+/* Modal com fade in/out */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.modal.show {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background-color: #222;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  position: relative;
+}
+
+.modal-content img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.close {
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+footer {
+  background: #111;
+  color: #ccc;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid #333;
+  font-size: 0.9rem;
+}
+
+.footer-content nav {
+  margin-top: 0.5rem;
+}
+
+.footer-content nav a {
+  color: #ccc;
+  margin: 0 10px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-content nav a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .carrinho-flutuante {
+    width: 90%;
+    right: 5%;
+    top: auto;
+    bottom: 10px;
+    max-height: 40vh;
+  }
+
+  footer {
+    font-size: 0.8rem;
+  }
+}
+#forma-pagamento {
+  max-width: 700px;
+  margin: 2rem auto 0 auto;
+  color: #fff;
+  font-size: 1.1rem;
+  background: #1e1e1e;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+#forma-pagamento h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #81c784;
+}
+#forma-pagamento label {
+  cursor: pointer;
+}
