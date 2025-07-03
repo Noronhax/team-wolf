@@ -30,16 +30,16 @@ const produtos = [
     descricao: "Conjunto oficial masculino preto e branco, leve e confortável."
   },
   {
-     nome: "Calção Team Wolf SS25 Futevôlei feminino- preto/branco",
-    preco: 69.99,
-    imagem: "uniformes/aluno1.png",
-    descricao: "Calção oficial feminino preto com branco, leve e confortável."
-  },
-  {
     nome: "Garra Do Lobo Team Wolf SS25 Futevôlei- preto/branco",
     preco: 139.99,
     imagem: "uniformes/garra.png",
     descricao: "Conjunto oficial Garra Do Lobo, leve e confortável."
+  },
+  {
+    nome: "Calção Team Wolf SS25 Futevôlei feminino- preto/branco",
+    preco: 69.99,
+    imagem: "uniformes/aluno1.png",
+    descricao: "Calção oficial feminino preto com branco, leve e confortável."
   }
 ];
 
