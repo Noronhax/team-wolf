@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Team Wolf FTV - Painel</title>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+  /* Reset básico */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: #1f1f1f;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  header img {
+    width: 50px;
+    filter: drop-shadow(0 0 5px #ffcc00);
+  }
+  header h1 {
+    font-weight: 900;
+    color: #ffcc00;
+    text-shadow: 0 0 10px #ffcc00;
+  }
+  main {
+    flex: 1;
+    padding: 2rem;
+    background: #181818;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .card {
+    background: #252525;
+    border-radius: 10px;
+    padding: 1.5rem;
+    flex: 1 1 300px;
+    box-shadow: 0 0 15px rgba(255,204,0,0.3);
+  }
+  .card h2 {
+    margin-bottom: 1rem;
+    color: #ffcc00;
+  }
+  button {
+    background: #ffcc00;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    color: #222;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #e6b800;
+  }
+  input, select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 1rem;
+  }
+  nav {
+    background: #1a1a1a;
+    padding: 1rem 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  nav button {
+    background: #333;
+    color: #eee;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+  }
+  nav button.active, nav button:hover {
+    background: #ffcc00;
+    color: #222;
+  }
+  footer {
+    background: #1f1f1f;
+    color: #aaa;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+  /* Login */
+  #login-section {
+    max-width: 400px;
+    margin: 6rem auto;
+    background: #222;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255,204,0,0.5);
+  }
+  #login-section h2 {
+    margin-bottom: 1.5rem;
+    color: #ffcc00;
+    text-align: center;
+  }
+  #login-section input {
+    background: #333;
+    color: #eee;
+  }
+  #login-section button {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  #error-msg {
+    color: #ff4444;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  /* Responsividade para celular */
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  header img {
+    width: 40px;
+  }
+  main {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .card {
+    flex: 1 1 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  nav {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  nav button {
+    flex: 1 1 45%;
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+  #login-section {
+    margin: 3rem 1rem;
+    width: auto;
+  }
+  input, button, select {
+    font-size: 1.1rem;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <img src="./logo_6-removebg-preview.png" alt="Logo Team Wolf FTV" />
+  <h1>Team Wolf FTV - Painel</h1>
+</header>
+
+<!-- Login -->
+<section id="login-section">
+  <h2>Login</h2>
+  <div id="error-msg"></div>
+  <input type="email" id="email" placeholder="Email" />
+  <input type="password" id="password" placeholder="Senha" />
+  <button id="login-btn">Entrar</button>
+  <button id="signup-btn">Cadastrar</button>
+</section>
+
+<!-- Painel -->
+<main id="dashboard" style="display:none;">
+  <nav>
+    <button class="active" data-tab="vendas">Vendas</button>
+    <button data-tab="estoque">Estoque</button>
+    <button data-tab="fluxo">Entradas/Saídas</button>
+    <button data-tab="relatorios">Relatórios</button>
+    <button id="logout-btn" style="margin-left:auto; background:#ff4444; color:#fff;">Sair</button>
+  </nav>
+
+  <section id="vendas" class="card tab-content">
+    <h2>Controle de Vendas</h2>
+    <form id="form-venda">
+      <input type="text" id="produto-venda" placeholder="Nome do produto" required />
+      <input type="number" id="quantidade-venda" placeholder="Quantidade" min="1" required />
+      <input type="number" id="preco-venda" placeholder="Preço unitário" min="0" step="0.01" required />
+      <button type="submit">Registrar Venda</button>
+    </form>
+    <h3>Vendas Recentes</h3>
+    <ul id="lista-vendas"></ul>
+  </section>
+
+  <section id="estoque" class="card tab-content" style="display:none;">
+    <h2>Controle de Estoque</h2>
+    <form id="form-estoque">
+      <input type="text" id="produto-estoque" placeholder="Nome do produto" required />
+      <input type="number" id="quantidade-estoque" placeholder="Quantidade" min="0" required />
+      <button type="submit">Adicionar/Atualizar Estoque</button>
+    </form>
+    <h3>Produtos em Estoque</h3>
+    <ul id="lista-estoque"></ul>
+  </section>
+
+  <section id="fluxo" class="card tab-content" style="display:none;">
+    <h2>Entradas e Saídas</h2>
+    <form id="form-fluxo">
+      <select id="tipo-fluxo" required>
+        <option value="" disabled selected>Selecione o tipo</option>
+        <option value="entrada">Entrada</option>
+        <option value="saida">Saída</option>
+      </select>
+      <input type="text" id="descricao-fluxo" placeholder="Descrição" required />
+      <input type="number" id="valor-fluxo" placeholder="Valor (R$)" min="0" step="0.01" required />
+      <button type="submit">Registrar</button>
+    </form>
+    <h3>Movimentações Recentes</h3>
+    <ul id="lista-fluxo"></ul>
+  </section>
+
+  <section id="relatorios" class="card tab-content" style="display:none;">
+    <h2>Relatórios</h2>
+    <canvas id="grafico-vendas" height="150"></canvas>
+    <canvas id="grafico-estoque" height="150" style="margin-top: 2rem;"></canvas>
+  </section>
+</main>
+
+<footer>
+  &copy; 2025 Team Wolf FTV. Todos os direitos reservados.
+</footer>
+
+<script>
+  // Config Firebase - use suas credenciais aqui:
+  const firebaseConfig = {
+    apiKey: "AIzaSyDBAmT-80xzeVbfECpBWVfG1enXDR9vzOE",
+    authDomain: "teamwolf-painel.firebaseapp.com",
+    projectId: "teamwolf-painel",
+    storageBucket: "teamwolf-painel.appspot.com",
+    messagingSenderId: "421930217",
+    appId: "1:421930217:web:7e9327c16e8e4d692fc832",
+    measurementId: "G-TB0EXXRC2D"
+  };
+
+  // Inicializa Firebase
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // Elementos
+  const loginSection = document.getElementById('login-section');
+  const dashboard = document.getElementById('dashboard');
+  const errorMsg = document.getElementById('error-msg');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const loginBtn = document.getElementById('login-btn');
+  const signupBtn = document.getElementById('signup-btn');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  // Navegação
+  const navButtons = dashboard.querySelectorAll('nav button[data-tab]');
+  const tabContents = dashboard.querySelectorAll('.tab-content');
+
+  navButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      const tab = button.getAttribute('data-tab');
+      tabContents.forEach(tc => tc.style.display = 'none');
+      document.getElementById(tab).style.display = 'block';
+    });
+  });
+
+  // Login e Cadastro
+  loginBtn.onclick = () => {
+    errorMsg.textContent = '';
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+    if (!email || !password) {
+      errorMsg.textContent = 'Preencha email e senha.';
+      return;
+    }
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        emailInput.value = '';
+        passwordInput.value = '';
+      })
+      .catch(e => {
+        errorMsg.textContent = 'Erro ao entrar: ' + e.message;
+      });
+  };
+
+  signupBtn.onclick = () => {
+    errorMsg.textContent = '';
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+    if (!email || !password) {
+      errorMsg.textContent = 'Preencha email e senha.';
+      return;
+    }
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        errorMsg.textContent = 'Usuário criado com sucesso! Faça login.';
+        emailInput.value = '';
+        passwordInput.value = '';
+      })
+      .catch(e => {
+        errorMsg.textContent = 'Erro ao cadastrar: ' + e.message;
+      });
+  };
+
+  logoutBtn.onclick = () => {
+    auth.signOut();
+  };
+
+  // Atualiza UI conforme estado de login
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      loginSection.style.display = 'none';
+      dashboard.style.display = 'flex';
+      carregarDados();
+    } else {
+      loginSection.style.display = 'block';
+      dashboard.style.display = 'none';
+    }
+  });
+
+  // Funções para Vendas
+  const formVenda = document.getElementById('form-venda');
+  const listaVendas = document.getElementById('lista-vendas');
+
+ // Função para mostrar notificações simples
+function notificar(mensagem, tipo = 'info') {
+  const existing = document.getElementById('notificacao');
+  if (existing) existing.remove();
+
+  const notif = document.createElement('div');
+  notif.id = 'notificacao';
+  notif.textContent = mensagem;
+  notif.style.position = 'fixed';
+  notif.style.top = '1rem';
+  notif.style.right = '1rem';
+  notif.style.backgroundColor = tipo === 'error' ? '#ff4444' : '#ffcc00';
+  notif.style.color = '#222';
+  notif.style.padding = '1rem 2rem';
+  notif.style.borderRadius = '8px';
+  notif.style.boxShadow = '0 0 10px rgba(255,204,0,0.8)';
+  notif.style.fontWeight = '700';
+  notif.style.zIndex = 9999;
+  document.body.appendChild(notif);
+
+  setTimeout(() => {
+    notif.style.transition = 'opacity 0.5s ease';
+    notif.style.opacity = '0';
+    setTimeout(() => notif.remove(), 500);
+  }, 4000);
+}
+
+// Função atualizada para registrar venda
+formVenda.addEventListener('submit', async e => {
+  e.preventDefault();
+  const produto = document.getElementById('produto-venda').value.trim().toLowerCase();
+  const quantidade = parseInt(document.getElementById('quantidade-venda').value);
+  const preco = parseFloat(document.getElementById('preco-venda').value);
+  if (!produto || quantidade <= 0 || preco < 0) return alert('Preencha os dados corretamente.');
+
+  try {
+    // Checar estoque disponível
+    const estoqueRef = db.collection('estoque').doc(produto);
+    const docEstoque = await estoqueRef.get();
+    if (!docEstoque.exists) {
+      notificar('Produto não encontrado no estoque.', 'error');
+      return;
+    }
+    const estoqueAtual = docEstoque.data().quantidade;
+    if (estoqueAtual < quantidade) {
+      notificar(`Estoque insuficiente. Atual: ${estoqueAtual} un.`, 'error');
+      return;
+    }
+
+    // Registrar venda
+    const venda = {
+      produto,
+      quantidade,
+      preco,
+      total: quantidade * preco,
+      data: new Date()
+    };
+    await db.collection('vendas').add(venda);
+
+    // Atualizar estoque (diminuir)
+    await estoqueRef.update({ quantidade: estoqueAtual - quantidade });
+
+    // Registrar saída automática no fluxo
+    const saida = {
+      tipo: 'saida',
+      descricao: `Venda de ${quantidade} un. de ${produto}`,
+      valor: venda.total,
+      data: new Date()
+    };
+    await db.collection('fluxo').add(saida);
+
+    formVenda.reset();
+    carregarDados();
+
+    notificar('Venda registrada com sucesso!');
+  } catch (err) {
+    notificar('Erro ao registrar venda: ' + err.message, 'error');
+  }
+});
+
+
+  // Funções para Estoque
+  const formEstoque = document.getElementById('form-estoque');
+  const listaEstoque = document.getElementById('lista-estoque');
+
+  formEstoque.addEventListener('submit', e => {
+    e.preventDefault();
+    const produto = document.getElementById('produto-estoque').value.trim();
+    const quantidade = parseInt(document.getElementById('quantidade-estoque').value);
+    if (!produto || quantidade < 0) return alert('Preencha os dados corretamente.');
+
+    // Atualiza estoque no Firestore (coleção estoque)
+    const estoqueRef = db.collection('estoque').doc(produto.toLowerCase());
+    estoqueRef.get().then(doc => {
+      if (doc.exists) {
+        const novaQtd = quantidade;
+        estoqueRef.update({ quantidade: novaQtd })
+          .then(() => {
+            formEstoque.reset();
+            carregarEstoque();
+          });
+      } else {
+        estoqueRef.set({ produto, quantidade })
+          .then(() => {
+            formEstoque.reset();
+            carregarEstoque();
+          });
+      }
+    }).catch(err => alert('Erro no estoque: ' + err.message));
+  });
+
+  // Funções para Fluxo (Entradas/Saídas)
+  const formFluxo = document.getElementById('form-fluxo');
+  const listaFluxo = document.getElementById('lista-fluxo');
+
+  formFluxo.addEventListener('submit', e => {
+    e.preventDefault();
+    const tipo = document.getElementById('tipo-fluxo').value;
+    const descricao = document.getElementById('descricao-fluxo').value.trim();
+    const valor = parseFloat(document.getElementById('valor-fluxo').value);
+    if (!tipo || !descricao || valor < 0) return alert('Preencha os dados corretamente.');
+
+    const movimento = {
+      tipo,
+      descricao,
+      valor,
+      data: new Date()
+    };
+
+    db.collection('fluxo').add(movimento)
+      .then(() => {
+        formFluxo.reset();
+        carregarFluxo();
+      })
+      .catch(err => alert('Erro ao salvar fluxo: ' + err.message));
+  });
+
+  // Carregar dados no painel
+  function carregarDados() {
+    carregarVendas();
+    carregarEstoque();
+    carregarFluxo();
+    gerarGraficos();
+  }
+
+  // Carregar vendas
+  function carregarVendas() {
+    listaVendas.innerHTML = '<li>Carregando...</li>';
+    db.collection('vendas').orderBy('data', 'desc').limit(10).get()
+      .then(snapshot => {
+        listaVendas.innerHTML = '';
+        if (snapshot.empty) {
+          listaVendas.innerHTML = '<li>Nenhuma venda registrada.</li>';
+          return;
+        }
+        snapshot.forEach(doc => {
+          const v = doc.data();
+          const dataStr = v.data.toDate().toLocaleString('pt-BR');
+          listaVendas.innerHTML += `<li><strong>${v.produto}</strong> - ${v.quantidade} un. - R$${v.preco.toFixed(2)} (Total: R$${v.total.toFixed(2)})<br><small>${dataStr}</small></li>`;
+        });
+      });
+  }
+
+  // Carregar estoque
+  function carregarEstoque() {
+    listaEstoque.innerHTML = '<li>Carregando...</li>';
+    db.collection('estoque').orderBy('produto').get()
+      .then(snapshot => {
+        listaEstoque.innerHTML = '';
+        if (snapshot.empty) {
+          listaEstoque.innerHTML = '<li>Estoque vazio.</li>';
+          return;
+        }
+        snapshot.forEach(doc => {
+          const e = doc.data();
+          listaEstoque.innerHTML += `<li><strong>${e.produto}</strong>: ${e.quantidade} un.</li>`;
+        });
+      });
+  }
+
+  // Carregar fluxo
+  function carregarFluxo() {
+    listaFluxo.innerHTML = '<li>Carregando...</li>';
+    db.collection('fluxo').orderBy('data', 'desc').limit(10).get()
+      .then(snapshot => {
+        listaFluxo.innerHTML = '';
+        if (snapshot.empty) {
+          listaFluxo.innerHTML = '<li>Nenhum movimento registrado.</li>';
+          return;
+        }
+        snapshot.forEach(doc => {
+          const f = doc.data();
+          const dataStr = f.data.toDate().toLocaleString('pt-BR');
+          listaFluxo.innerHTML += `<li><strong>${f.tipo.toUpperCase()}</strong> - ${f.descricao} - R$${f.valor.toFixed(2)}<br><small>${dataStr}</small></li>`;
+        });
+      });
+  }
+
+  // Gráficos
+  let graficoVendas, graficoEstoque;
+  function gerarGraficos() {
+    // Gráfico vendas por produto (top 5)
+    db.collection('vendas').get().then(snapshot => {
+      const vendasPorProduto = {};
+      snapshot.forEach(doc => {
+        const v = doc.data();
+        vendasPorProduto[v.produto] = (vendasPorProduto[v.produto] || 0) + v.total;
+      });
+
+      const produtos = Object.keys(vendasPorProduto).slice(0,5);
+      const valores = produtos.map(p => vendasPorProduto[p]);
+
+      const ctxVendas = document.getElementById('grafico-vendas').getContext('2d');
+      if (graficoVendas) graficoVendas.destroy();
+      graficoVendas = new Chart(ctxVendas, {
+        type: 'bar',
+        data: {
+          labels: produtos,
+          datasets: [{
+            label: 'Total em vendas (R$)',
+            data: valores,
+            backgroundColor: '#ffcc00',
+          }]
+        },
+        options: {
+          scales: {
+            y: { beginAtZero: true }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    });
+
+    // Gráfico estoque
+    db.collection('estoque').get().then(snapshot => {
+      const produtosEstoque = [];
+      const quantidades = [];
+      snapshot.forEach(doc => {
+        const e = doc.data();
+        produtosEstoque.push(e.produto);
+        quantidades.push(e.quantidade);
+      });
+
+      const ctxEstoque = document.getElementById('grafico-estoque').getContext('2d');
+      if (graficoEstoque) graficoEstoque.destroy();
+      graficoEstoque = new Chart(ctxEstoque, {
+        type: 'pie',
+        data: {
+          labels: produtosEstoque,
+          datasets: [{
+            label: 'Quantidade em estoque',
+            data: quantidades,
+            backgroundColor: [
+              '#ffcc00',
+              '#ffaa00',
+              '#ff8800',
+              '#ff6600',
+              '#ff4400',
+              '#cc3300'
+            ]
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { position: 'right' }
+          }
+        }
+      });
+    });
+  }
+</script>
+</body>
+</html>

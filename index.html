@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catálogo | Team Wolf FTV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+      color: #111;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+      z-index: 100;
+    }
+
+    .logo {
+      height: 80px;
+    }
+
+    h1, h2, h3 {
+      margin: 5px 0;
+    }
+
+    .catalogo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .item {
+      width: 300px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin: 15px;
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .item:hover {
+      transform: translateY(-5px);
+    }
+
+    .item img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .item button {
+      margin-top: 10px;
+      background: #111;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .item button:hover {
+      background: #333;
+    }
+
+    #toggle-carrinho {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 1100;
+      font-size: 16px;
+    }
+
+    .carrinho-flutuante {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      width: 300px;
+      max-height: 80vh;
+      background: #fff;
+      border: 2px solid #111;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Estilo da área de forma de pagamento */
+#forma-pagamento {
+  margin-top: 20px;
+  padding: 10px;
+  background: #111;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #fff;
+  border: 1px solid #0af;
+}
+
+#forma-pagamento h3 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #0af;
+}
+
+#forma-pagamento label {
+  display: inline-block;
+  margin-right: 20px;
+  padding: 8px 12px;
+  background: #222;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+#forma-pagamento input[type="radio"] {
+  display: none;
+}
+
+#forma-pagamento input[type="radio"]:checked + span {
+  background: #0af;
+  color: #111;
+  border: 2px solid #0af;
+}
+
+#forma-pagamento label span {
+  pointer-events: none;
+}
+
+/* Botão WhatsApp */
+#btn-whatsapp {
+  display: block;
+  margin-top: 20px;
+  padding: 14px 20px;
+  background: linear-gradient(45deg, #25D366, #128C7E);
+  color: white;
+  text-align: center;
+  font-weight: 700;
+  border-radius: 12px;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#btn-whatsapp:hover {
+  background: linear-gradient(45deg, #20c35b, #0f7a6b);
+  transform: scale(1.03);
+}
+
+
+    footer {
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    .footer-content a {
+      color: #0af;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    @media (max-width: 768px) {
+      .item {
+        width: 90%;
+      }
+      #toggle-carrinho {
+        top: 10px;
+        right: 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo_6-removebg-preview.png" class="logo" alt="Team Wolf FTV Logo"/>
+    <h1>TEAM WOLF FTV</h1>
+    <h2>Vista a garra, jogue com alma. Seja lobo, seja Team Wolf FTV!</h2> 
+    <h3>CATÁLOGO OFICIAL</h3>
+  </header>
+
+  <main class="catalogo" id="produtos">
+
+  </main>
+
+  <button id="toggle-carrinho" onclick="toggleCarrinho()">🛒 Carrinho</button>
+
+  <div class="carrinho-flutuante" id="carrinho">
+    <h3>🛒 Carrinho (0 itens)</h3>
+    <div id="lista-carrinho"></div>
+    <div id="forma-pagamento">
+      <h3>Forma de pagamento:</h3>
+      <label><input type="radio" name="pagamento" value="PIX" checked/> <span>PIX</span> </label>
+      </div>
+    <a id="btn-whatsapp" href="#" target="_blank">Finalizar compra via WhatsApp</a>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <p>© 2025 Team Wolf FTV. Todos os direitos reservados.</p>
+      <nav>
+        <a href="#produtos">Produtos</a>
+        <a href="https://www.instagram.com/team.wolfftv?igsh=NTdla24wbzJhcmtt&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </nav>
+    </div>
+  </footer>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span onclick="fecharModal()" class="close">&times;</span>
+      <img id="modal-img" alt="Imagem do produto" />
+      <h2 id="modal-titulo"></h2>
+      <p id="modal-preco"></p>
+      <p id="modal-desc"></p>
+    </div>
+  </div>
+
+  <script>
+    function toggleCarrinho() {
+      const carrinho = document.getElementById("carrinho");
+      carrinho.style.display = (carrinho.style.display === "block") ? "none" : "block";
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

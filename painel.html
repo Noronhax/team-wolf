@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Painel Admin - Team Wolf</title>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #111;
+      color: white;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #0af;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #0af;
+      padding: 10px;
+      text-align: left;
+    }
+    button {
+      background: #0af;
+      border: none;
+      padding: 8px 12px;
+      color: #111;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #08c;
+    }
+    input[type=text], input[type=number] {
+      padding: 8px;
+      margin-right: 10px;
+      border-radius: 6px;
+      border: none;
+      width: 200px;
+    }
+    #logout-btn {
+      background: #f33;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="logout-btn" onclick="logout()">Sair</button>
+
+  <h1>Painel Admin - Team Wolf</h1>
+
+  <form id="form-adicionar" onsubmit="adicionarProduto(event)">
+    <input type="text" id="nome-produto" placeholder="Nome do Produto" required />
+    <input type="number" id="preco-produto" placeholder="Preço (ex: 99.99)" step="0.01" min="0" required />
+    <input type="text" id="imagem-produto" placeholder="URL da Imagem" required />
+    <button type="submit">Adicionar Produto</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Preço (R$)</th>
+        <th>Imagem</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="tabela-produtos"></tbody>
+  </table>
+
+  <script>
+    // Checa se está logado, senão redireciona para login
+    if(localStorage.getItem('loggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+
+    // Produtos salvos em localStorage (inicializa)
+    let produtos = JSON.parse(localStorage.getItem('produtos')) || [
+      { nome: "Conjunto branco e preto", preco: 120.00, imagem: "uniformes/instrutor1.jpg" },
+      { nome: "Conjunto preto e branco", preco: 120.00, imagem: "uniformes/aluno2.png" },
+      { nome: "Conjunto branco e vermelho", preco: 139.99, imagem: "uniformes/brancoevermelho.png" },
+      { nome: "Conjunto preto e dourado", preco: 149.90, imagem: "uniformes/preto e dourado.png" },
+      { nome: "Conjunto rosa e branco", preco: 139.99, imagem: "uniformes/rosa e branco.png" },
+      { nome: "Garra do Lobo", preco: 139.99, imagem: "uniformes/garra.png" },
+      { nome: "Calção feminino preto e branco", preco: 69.99, imagem: "uniformes/aluno1.png" }
+    ];
+
+    const tabela = document.getElementById('tabela-produtos');
+
+    function atualizarTabela() {
+      tabela.innerHTML = '';
+      produtos.forEach((produto, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${produto.nome}</td>
+          <td>${produto.preco.toFixed(2)}</td>
+          <td><img src="${produto.imagem}" alt="${produto.nome}" style="width: 80px; border-radius: 8px;"></td>
+          <td><button onclick="removerProduto(${index})">Remover</button></td>
+        `;
+        tabela.appendChild(tr);
+      });
+      salvarProdutos();
+    }
+
+    function adicionarProduto(e) {
+      e.preventDefault();
+      const nome = document.getElementById('nome-produto').value.trim();
+      const preco = parseFloat(document.getElementById('preco-produto').value);
+      const imagem = document.getElementById('imagem-produto').value.trim();
+
+      if(nome && !isNaN(preco) && imagem) {
+        produtos.push({ nome, preco, imagem });
+        atualizarTabela();
+        e.target.reset();
+      }
+    }
+
+    function removerProduto(index) {
+      produtos.splice(index, 1);
+      atualizarTabela();
+    }
+
+    function salvarProdutos() {
+      localStorage.setItem('produtos', JSON.stringify(produtos));
+    }
+
+    function logout() {
+      localStorage.removeItem('loggedIn');
+      window.location.href = 'login.html';
+    }
+
+    // Inicializa tabela
+    atualizarTabela();
+  </script>
+
+</body>
+</html>
