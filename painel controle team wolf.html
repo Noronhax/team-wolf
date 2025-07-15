@@ -241,6 +241,24 @@
 
   <section id="relatorios" class="card tab-content" style="display:none;">
     <h2>Relatórios</h2>
+   <div id="meta-valores" style="margin-bottom: 2rem;">
+    <button id="resetar-historico" style="margin-top: 2rem; background:#ff4444; color:#fff;">Resetar Histórico de Vendas e Relatórios</button>
+  <h3 style="color:#ffcc00;">Meta de Faturamento</h3>
+
+  <label for="input-meta" style="display:block; margin: 10px 0 5px;">Definir nova meta (R$):</label>
+  <input type="number" id="input-meta" min="0" step="0.01" placeholder="Ex: 10000.00" style="width: 100%; padding: 8px; border-radius: 5px; border: none; margin-bottom: 10px;" />
+  <button id="btn-atualizar-meta">Salvar Meta</button>
+
+  <p style="margin-top:15px;">Meta atual: <strong>R$ <span id="meta-total">0.00</span></strong></p>
+  <p>Recebido: <strong>R$ <span id="meta-recebido">0.00</span></strong></p>
+  <p>Faltam: <strong>R$ <span id="meta-faltam">0.00</span></strong></p>
+  <p>Progresso: <strong><span id="meta-porcentagem">0%</span></strong></p>
+  <div style="width:100%; background:#333; border-radius:10px; height:20px; margin-top:10px;">
+    <div id="meta-barra" style="height:100%; width:0%; background:#ffcc00; border-radius:10px;"></div>
+  </div>
+</div>
+
+
     <canvas id="grafico-vendas" height="150"></canvas>
     <canvas id="grafico-estoque" height="150" style="margin-top: 2rem;"></canvas>
   </section>
@@ -339,10 +357,96 @@
       loginSection.style.display = 'none';
       dashboard.style.display = 'flex';
       carregarDados();
+      calcularMetaValores();
     } else {
       loginSection.style.display = 'block';
       dashboard.style.display = 'none';
     }
+    function calcularMetaValores() {
+  db.collection("configuracoes").doc("metaFaturamento").get().then(doc => {
+    if (doc.exists) {
+      valorMetaAtual = doc.data().valor || 10000;
+    } else {
+      valorMetaAtual = 10000;
+    }
+
+    document.getElementById("meta-total").textContent = valorMetaAtual.toFixed(2);
+
+    // Soma das vendas
+    db.collection("vendas").get().then(snapshot => {
+      let totalRecebido = 0;
+
+      snapshot.forEach(doc => {
+        const v = doc.data();
+        totalRecebido += Number(v.total || 0);
+      });
+
+      const faltam = Math.max(0, valorMetaAtual - totalRecebido);
+      const porcentagem = Math.min((totalRecebido / valorMetaAtual) * 100, 100);
+
+      document.getElementById("meta-recebido").textContent = totalRecebido.toFixed(2);
+      document.getElementById("meta-faltam").textContent = faltam.toFixed(2);
+      document.getElementById("meta-porcentagem").textContent = porcentagem.toFixed(1) + "%";
+      document.getElementById("meta-barra").style.width = porcentagem + "%";
+    });
+  });
+}
+
+const btnResetar = document.getElementById("resetar-historico");
+
+btnResetar.addEventListener("click", async () => {
+  const confirmacao = confirm("Tem certeza que deseja apagar TODO o histórico de vendas e fluxo?");
+  if (!confirmacao) return;
+
+  try {
+    // Apagar vendas
+    const vendasSnapshot = await db.collection("vendas").get();
+    const batch1 = db.batch();
+    vendasSnapshot.forEach(doc => batch1.delete(doc.ref));
+    await batch1.commit();
+
+    // Apagar fluxo
+    const fluxoSnapshot = await db.collection("fluxo").get();
+    const batch2 = db.batch();
+    fluxoSnapshot.forEach(doc => batch2.delete(doc.ref));
+    await batch2.commit();
+
+    notificar("Histórico apagado com sucesso!", "info");
+
+    // Recarregar dados visuais
+    carregarDados();
+    calcularMetaValores();
+  } catch (err) {
+    notificar("Erro ao apagar histórico: " + err.message, "error");
+  }
+});
+
+
+const inputMeta = document.getElementById('input-meta');
+const btnAtualizarMeta = document.getElementById('btn-atualizar-meta');
+let valorMetaAtual = 10000; // fallback se não encontrar no Firestore
+
+// Atualiza meta no Firestore
+btnAtualizarMeta.addEventListener('click', async () => {
+  const novoValor = parseFloat(inputMeta.value);
+  if (isNaN(novoValor) || novoValor <= 0) {
+    notificar("Digite um valor válido para a meta.", "error");
+    return;
+  }
+
+  try {
+    await db.collection("configuracoes").doc("metaFaturamento").set({
+      valor: novoValor
+    });
+    valorMetaAtual = novoValor;
+    calcularMetaValores();
+    notificar("Meta atualizada com sucesso!");
+  } catch (err) {
+    notificar("Erro ao salvar meta: " + err.message, "error");
+  }
+});
+
+
   });
 
   // Funções para Vendas
