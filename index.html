@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Catálogo | Team Wolf FTV</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +23,7 @@
       top: 0;
       background: #fff;
       padding: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       text-align: center;
       z-index: 100;
     }
@@ -31,7 +32,9 @@
       height: 80px;
     }
 
-    h1, h2, h3 {
+    h1,
+    h2,
+    h3 {
       margin: 5px 0;
     }
 
@@ -46,7 +49,7 @@
       width: 300px;
       background: white;
       border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       margin: 15px;
       padding: 15px;
       text-align: center;
@@ -101,7 +104,7 @@
       border: 2px solid #111;
       border-radius: 12px;
       padding: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       overflow-y: auto;
       display: none;
       z-index: 1000;
@@ -109,72 +112,79 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Estilo da área de forma de pagamento */
-#forma-pagamento {
-  margin-top: 20px;
-  padding: 10px;
-  background: #111;
-  border-radius: 12px;
-  font-size: 15px;
-  color: #fff;
-  border: 1px solid #0af;
-}
+    #forma-pagamento {
+      margin-top: 20px;
+      padding: 10px;
+      background: #111;
+      border-radius: 12px;
+      font-size: 15px;
+      color: #fff;
+      border: 1px solid #0af;
+    }
 
-#forma-pagamento h3 {
-  margin-top: 0;
-  font-size: 16px;
-  color: #0af;
-}
+    #forma-pagamento h3 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #0af;
+    }
 
-#forma-pagamento label {
-  display: inline-block;
-  margin-right: 20px;
-  padding: 8px 12px;
-  background: #222;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-}
+    #forma-pagamento label {
+      display: inline-block;
+      margin-right: 20px;
+      padding: 8px 12px;
+      background: #222;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
 
-#forma-pagamento input[type="radio"] {
-  display: none;
-}
+    #forma-pagamento input[type="radio"] {
+      display: none;
+    }
 
-#forma-pagamento input[type="radio"]:checked + span {
-  background: #0af;
-  color: #111;
-  border: 2px solid #0af;
-}
+    #forma-pagamento input[type="radio"]:checked+span {
+      background: #0af;
+      color: #111;
+      border: 2px solid #0af;
+    }
 
-#forma-pagamento label span {
-  pointer-events: none;
-}
+    #forma-pagamento label span {
+      pointer-events: none;
+    }
 
-/* Botão WhatsApp */
-#btn-whatsapp {
-  display: block;
-  margin-top: 20px;
-  padding: 14px 20px;
-  background: linear-gradient(45deg, #25D366, #128C7E);
-  color: white;
-  text-align: center;
-  font-weight: 700;
-  border-radius: 12px;
-  font-size: 16px;
-  text-decoration: none;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
+    /* Botão WhatsApp */
+    #btn-whatsapp {
+      display: block;
+      margin-top: 20px;
+      padding: 14px 20px;
+      background: linear-gradient(45deg, #25D366, #128C7E);
+      color: white;
+      text-align: center;
+      font-weight: 700;
+      border-radius: 12px;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
 
-#btn-whatsapp:hover {
-  background: linear-gradient(45deg, #20c35b, #0f7a6b);
-  transform: scale(1.03);
-}
+    #btn-whatsapp:hover {
+      background: linear-gradient(45deg, #20c35b, #0f7a6b);
+      transform: scale(1.03);
+    }
 
 
     footer {
@@ -195,57 +205,275 @@
       .item {
         width: 90%;
       }
+
       #toggle-carrinho {
         top: 10px;
         right: 10px;
         font-size: 14px;
       }
     }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.75);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #fff;
+      max-width: 90%;
+      max-height: 90%;
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      overflow: auto;
+      position: relative;
+    }
+
+    .modal-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: transparent;
+      border: none;
+      font-size: 1.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .banners {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+  margin: 20px auto;
+  border-radius: 8px;
+}
+
+.banner-container {
+  display: flex;
+  transition: transform 0.6s ease;
+}
+
+.banner-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.banner-slide img,
+.banner-slide video {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.banner-slide video {
+  display: block;
+}
+
+.banner-prev,
+.banner-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 0.4rem;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 10;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.banner-prev { left: 1rem; }
+.banner-next { right: 1rem; }
+
+.sponsors-section {
+  padding: 40px 0;
+  background: #ffffff;
+  text-align: center;
+}
+.sponsors-section .section-title {
+  font-size: 1.8rem;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.sponsors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  justify-items: center;
+  gap: 24px;
+  padding: 0 20px;
+}
+
+.sponsor-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 80px;
+  background: rgb(0, 0, 0);
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.sponsor-item:hover {
+  transform: translateY(-4px);
+}
+
+.sponsor-item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+  </style>
+
   </style>
 </head>
+
 <body>
   <header>
-    <img src="logo_6-removebg-preview.png" class="logo" alt="Team Wolf FTV Logo"/>
+    <img src="logo_6-removebg-preview.png" class="logo" alt="Team Wolf FTV Logo" />
     <h1>TEAM WOLF FTV</h1>
-    <h2>Vista a garra, jogue com alma. Seja lobo, seja Team Wolf FTV!</h2> 
+    <h2>Vista a garra, jogue com alma. Seja lobo, seja Team Wolf FTV!</h2>
     <h3>CATÁLOGO OFICIAL</h3>
   </header>
+
+  <!-- BANNERS rotativos -->
+<section id="banners-promocionais" class="banners" aria-label="Promoções em destaque">
+  <div class="banner-container" role="region" aria-live="polite">
+    <!-- Slide em vídeo -->
+    <div class="banner-slide" data-type="video">
+      <video
+        autoplay muted loop playsinline
+        preload="metadata"
+        poster="banners/teste.mp4"
+        aria-label="Vídeo promocional Team Wolf FTV 2025"
+      >
+        <source src="banners/teste.mp4" type="video/mp4">
+        Seu navegador não suporta vídeo; veja <a href="banners/teste.mp4">aqui</a>.
+      </video>
+    </div>
+    <!-- Slides de imagem -->
+    <div class="banner-slide">
+      <img src="banners/frete.png" alt="Ofertas exclusivas só hoje – até 20% OFF">
+    </div>
+    <div class="banner-slide">
+      <img src="banners/banner1.png" alt="Lançamento coleção Team Wolf – uniforme 2025">
+    </div>
+  </div>
+  <button class="banner-prev" aria-label="Banner anterior">‹</button>
+  <button class="banner-next" aria-label="Próximo banner">›</button>
+</section>
+
+
 
   <main class="catalogo" id="produtos">
 
   </main>
 
-  <button id="toggle-carrinho" onclick="toggleCarrinho()">🛒 Carrinho</button>
-
-  <div class="carrinho-flutuante" id="carrinho">
+  <button id="toggle-carrinho" aria-label="Mostrar carrinho">🛒 Carrinho</button>
+  <div class="carrinho-flutuante" id="carrinho" role="region" aria-live="polite">
     <h3>🛒 Carrinho (0 itens)</h3>
+
     <div id="lista-carrinho"></div>
     <div id="forma-pagamento">
       <h3>Forma de pagamento:</h3>
-      <label><input type="radio" name="pagamento" value="PIX" checked/> <span>PIX</span> </label>
-      </div>
+      <label><input type="radio" name="pagamento" value="PIX" checked /> <span>PIX</span> </label>
+    </div>
     <a id="btn-whatsapp" href="#" target="_blank">Finalizar compra via WhatsApp</a>
   </div>
+
+   <section id="sponsors" aria-labelledby="patrocinadores" class="sponsors-section">
+  <h2 id="patrocinadores" class="section-title">Nossos Patrocinadores</h2>
+  <div class="sponsors-grid">
+    <!-- Repita este bloco para cada patrocinador -->
+    <a href="https://www.instagram.com/morenosalesba/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador A">
+      <img src="patrocinadores/colorido/moreno1.png" alt="Logo do Patrocinador A"/>
+    </a>
+    <a href="https://www.instagram.com/dezanutriestetica/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador B">
+      <img src="patrocinadores/colorido/deza.png" alt="Logo do Patrocinador B"/>
+    </a>
+    <a href="https://www.instagram.com/alive.multimarcass/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador B">
+      <img src="patrocinadores/colorido/logo_caime_story-removebg-preview.png" alt="Logo do Patrocinador B"/>
+    </a>
+    <a href="https://www.instagram.com/novolarentrerios/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador B">
+      <img src="patrocinadores/colorido/novo.png" alt="Logo do Patrocinador B"/>
+    </a>
+    <a href="https://www.instagram.com/escolajardimpequenopolis/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador B">
+      <img src="patrocinadores/colorido/peque.png" alt="Logo do Patrocinador B"/>
+    </a>
+    <a href="https://www.instagram.com/posturamodass/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador B">
+      <img src="patrocinadores/postura_modas_logo-removebg-preview.png" alt="Logo do Patrocinador B"/>
+    </a>
+     <a href="https://www.instagram.com/zemaranata/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador B">
+      <img src="patrocinadores/colorido/zé maranata.jpeg" alt="Logo do Patrocinador B"/>
+    </a>
+     <a href="https://www.instagram.com/licordobentao/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador B">
+      <img src="patrocinadores/colorido/WhatsApp Image 2025-07-28 at 01.12.59.jpeg" alt="Logo do Patrocinador B"/>
+    </a>
+     <a href="https://www.instagram.com/acaciavieiraargolo/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador B">
+      <img src="patrocinadores/colorido/logo---acacia-logo-2.png" alt="Logo do Patrocinador B"/>
+    </a>
+    <a href="https://www.instagram.com/depositodebebidasgrmagalhaes/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador B">
+      <img src="patrocinadores/colorido/tadinho-removebg-preview.png" alt="Logo do Patrocinador B"/>
+    </a>
+    <a href="https://www.instagram.com/igormonteiroficial/" target="_blank" rel="noopener" class="sponsor-item" aria-label="Veja o site do patrocinador B">
+      <img src="patrocinadores/colorido/525577621_740091448732866_4898555727727716846_n.jpg" alt="Logo do Patrocinador B"/>
+    </a>
+    <!-- /Repita -->
+  </div>
+</section>
+
 
   <footer>
     <div class="footer-content">
       <p>© 2025 Team Wolf FTV. Todos os direitos reservados.</p>
       <nav>
         <a href="#produtos">Produtos</a>
-        <a href="https://www.instagram.com/team.wolfftv?igsh=NTdla24wbzJhcmtt&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://www.instagram.com/team.wolfftv?igsh=NTdla24wbzJhcmtt&utm_source=qr" target="_blank"
+          rel="noopener noreferrer">Instagram</a>
       </nav>
     </div>
   </footer>
 
-  <div id="modal" class="modal">
+  <div id="modal" class="modal" role="dialog" aria-labelledby="modal-titulo" aria-modal="true" tabindex="-1">
     <div class="modal-content">
-      <span onclick="fecharModal()" class="close">&times;</span>
-      <img id="modal-img" alt="Imagem do produto" />
+      <button class="modal-close" aria-label="Fechar modal">×</button>
+      <img id="modal-img" alt="" />
       <h2 id="modal-titulo"></h2>
       <p id="modal-preco"></p>
-      <p id="modal-desc"></p>
+      <h3 id="modal-desc">Produto oficial da Team Wolf FTV.</h3>
     </div>
   </div>
+
 
   <script>
     function toggleCarrinho() {
@@ -253,6 +481,10 @@
       carrinho.style.display = (carrinho.style.display === "block") ? "none" : "block";
     }
   </script>
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
+  <script>
+
+  </script>
 </body>
+
 </html>
